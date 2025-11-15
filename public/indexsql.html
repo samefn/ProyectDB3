@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-R" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soccer Dashboard</title>
+  <link rel="stylesheet" href="Styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="background-overlay"></div>
+
+  <header>
+    <nav class="navbar">
+      <div class="nosql-button">
+        <a href="indexnosql.html" class="nosql-link">
+          <i class="fa-solid fa-database"></i> NoSQL
+        </a>
+      </div>
+      <div class="logo">
+        <i class="fa-solid fa-globe"></i>
+        Soccer Dashboard
+      </div>
+      <ul class="menu">
+        <li><a href="#" class="tab active" data-tab="club">🏟️ Club</a></li>
+        <li><a href="#" class="tab" data-tab="match">⚽ Match</a></li>
+        <li><a href="#" class="tab" data-tab="player">🧍 Player</a></li>
+        <li><a href="#" class="tab" data-tab="playermatch">📊 PlayerMatch</a></li>
+        <li><a href="#" class="tab" data-tab="profile">👤 Perfil</a></li>
+        <li><a href="#" id="logoutBtn" style="color: #ff4d4d;">🚪 Salir</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="club" class="tab-content active">
+    <div class="container">
+      <div class="form-section">
+        <label>Club ID</label>
+        <input type="text" placeholder="Insert data here">
+        <label>Club name</label>
+        <input type="text" placeholder="Insert data here">
+        <label>Country</label>
+        <input type="text" placeholder="Insert data here">
+        <label>City</label>
+        <input type="text" placeholder="Insert data here">
+        <label>Stadium</label>
+        <input type="text" placeholder="Insert data here">
+        <button>Insert register</button>
+      </div>
+
+      <div class="table-section">
+        <div class="query-bar">
+          <label>Select all data from club</label>
+          <button>Search</button>
+        </div>
+
+        <div class="query-bar">
+          <label>Select club by id</label>
+          <input type="text" placeholder="Insert query here">
+          <button>Search</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Club_id</th>
+              <th>Club name</th>
+              <th>Country</th>
+              <th>City</th>
+              <th>Stadium</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Real Madrid</td>
+              <td>Spain</td>
+              <td>Madrid</td>
+              <td>Santiago Bernabéu</td>
+              <td>3300M</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Barcelona</td>
+              <td>Spain</td>
+              <td>Barcelona</td>
+              <td>Camp Nou</td>
+              <td>3200M</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="match" class="tab-content">
+    <div class="container">
+      <div class="form-section">
+        <label>Match ID</label>
+        <input type="text" placeholder="Insert data here">
+        <label>Date</label>
+        <input type="text" placeholder="Insert data here">
+        <label>Result</label>
+        <input type="text" placeholder="Insert data here">
+        <label>Away club ID</label>
+        <input type="text" placeholder="Insert data here">
+        <label>Local club ID</label>
+        <input type="text" placeholder="Insert data here">
+        <button>Insert register</button>
+      </div>
+
+      <div class="table-section">
+        <div class="query-bar">
+          <label>Select all data from match</label>
+          <button>Search</button>
+        </div>
+
+        <div class="query-bar">
+          <label>Select</label>
+          <input type="text" placeholder="Insert query here">
+          <button>Search</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Match ID</th>
+              <th>Date</th>
+              <th>Result</th>
+              <th>Away Club ID</th>
+              <th>Local Club ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>2025-05-10</td>
+              <td>3 - 1</td>
+              <td>2</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>2025-06-18</td>
+              <td>0 - 0</td>
+              <td>3</td>
+              <td>4</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="player" class="tab-content">
+    <div class="container">
+      <div class="form-section">
+        <label>Player ID</label>
+        <input type="text" id="playerId" placeholder="Insert data here">
+
+        <label>First name</label>
+        <input type="text" id="firstName" placeholder="Insert data here">
+
+        <label>Last name</label>
+        <input type="text" id="lastName" placeholder="Insert data here">
+
+        <label>Age</label>
+        <input type="text" id="age" placeholder="Insert data here">
+
+        <label>Nationality</label>
+        <input type="text" id="nationality" placeholder="Insert data here">
+
+        <label>Club ID</label>
+        <input type="text" id="clubId" placeholder="Insert data here">
+
+        <button id="insertPlayerBtn">Insert register</button>
+      </div>
+
+      <div class="table-section">
+        <div class="query-bar">
+          <label>Select all data from player</label>
+          <button id="getAllPlayersBtn">Search</button>
+        </div>
+
+        <div class="query-bar">
+          <label>Select player by id</label>
+          <input type="text" id="searchPlayerInput" placeholder="Insert query here">
+          <button id="searchPlayerBtn">Search</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Player ID</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Age</th>
+              <th>Nationality</th>
+              <th>Club ID</th>
+            </tr>
+          </thead>
+          <tbody id="playerTableBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="playermatch" class="tab-content">
+    <div class="container">
+      <div class="form-section">
+        <label>Player ID</label>
+        <input type="text" placeholder="Insert data here">
+        <label>Match ID</label>
+        <input type="text" placeholder="Insert data here">
+        <button>Insert register</button>
+      </div>
+
+      <div class="table-section">
+        <div class="query-bar">
+          <label>Select all data from playermatch</label>
+          <button>Search</button>
+        </div>
+
+        <div class="query-bar">
+          <label>Select</label>
+          <input type="text" placeholder="Insert query here">
+          <button>Search</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Player ID</th>
+              <th>Match ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>3</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="profile" class="tab-content">
+    <div class="profile-container">
+      <h3>Mi Perfil</h3>
+      <p>Sube o actualiza tu foto de perfil.</p>
+
+      <div id="profileMessage" class="profile-message"></div>
+
+      <img id="profileImagePreview" src="https://placehold.co/150x150/263547/00ff88?text=Perfil"
+        alt="Vista previa de la imagen de perfil" class="profile-image-preview">
+
+      <form id="profileUploadForm" class="profile-form">
+        <div class="form-group">
+          <label>Nombre de Usuario (User)</label>
+          <div id="profileUsernameDisplay" class="profile-username-display">Cargando...</div>
+        </div>
+
+        <div class="form-group">
+          <label for="profileImageInput" class="file-label">
+            <i class="fa-solid fa-upload"></i> Seleccionar Imagen
+          </label>
+          <input type="file" id="profileImageInput" accept="image/png, image/jpeg, image/gif" required>
+        </div>
+
+        <button type="submit" id="profileUploadBtn">Subir Imagen</button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        tab.classList.add('active');
+        const targetContent = document.getElementById(tab.dataset.tab);
+        if (targetContent) {
+          targetContent.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+  <script src="js/club.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/match.js"></script>
+  <script src="js/playermatch.js"></script>
+  <script src="js/profile.js"></script>
+
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', function (event) {
+      event.preventDefault();
+
+      console.log('Cerrando sesión...');
+
+      window.location.href = 'login.html';
+    });
+  </script>
+
+</body>
+
+</html>F

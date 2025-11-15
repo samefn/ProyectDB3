@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soccer Dashboard</title>
+  <link rel="stylesheet" href="Styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    .club-block,
+    .stat-block {
+      margin-bottom: 18px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(0, 255, 136, 0.15);
+    }
+
+    .club-block label,
+    .stat-block label {
+      display: block;
+      margin-bottom: 6px;
+      color: #a8b3c0;
+      font-size: 12px;
+    }
+
+    .club-block input,
+    .stat-block input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+      border: 1px solid #00ff88;
+      border-radius: 5px;
+      background: transparent;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    .club-block hr,
+    .stat-block hr {
+      border: 0;
+      border-top: 1px solid rgba(0, 255, 136, 0.12);
+      margin: 10px 0;
+    }
+
+    .remove-block {
+      display: inline-block;
+      margin-left: 8px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #ff6b6b;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .query-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .query-bar label {
+      color: #a8b3c0;
+      font-size: 13px;
+      min-width: 200px;
+    }
+
+    .query-bar input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #00ff88;
+      border-radius: 6px;
+      background: transparent;
+      color: white;
+    }
+
+    .query-bar button {
+      background-color: #00ff88;
+      color: #000;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .query-bar button:hover {
+      background-color: #00cc6a;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="background-overlay"></div>
+
+  <header>
+    <nav class="navbar">
+      <div class="nosql-button">
+        <a href="indexsql.html" class="nosql-link">
+          <i class="fa-solid fa-database"></i> SQL
+        </a>
+      </div>
+
+      <div class="logo">
+        <i class="fa-solid fa-globe"></i>
+        Soccer Dashboard
+      </div>
+
+      <ul class="menu">
+        <li><a href="#" class="tab active" data-tab="football">🏆 Football Match</a></li>
+        <li><a href="#" class="tab" data-tab="player">🧍 Player</a></li>
+        <li><a href="#" class="tab" data-tab="profile">👤 Perfil</a></li>
+        <li><a href="#" id="logoutBtn" style="color: #ff4d4d;">🚪 Salir</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="football" class="tab-content active">
+    <div class="container">
+      <div class="form-section">
+        <h3>Insert Football Match</h3>
+
+        <label>Match ID</label>
+        <input type="text" id="matchId" placeholder="Insert data here">
+
+        <label>Competition</label>
+        <input type="text" id="competition" placeholder="Insert data here">
+
+        <label>Date</label>
+        <input type="date" id="date" placeholder="Insert data here">
+
+        <label>Result</label>
+        <input type="text" id="result" placeholder="Insert data here">
+
+        <button id="btnAddClub" class="action-btn" style="margin-top:10px;">
+          <i class="fa-solid fa-plus"></i> Agregar Club
+        </button>
+
+        <div id="clubContainer" style="margin-top:15px;"></div>
+
+        <button id="btnAddMatch" class="action-btn" style="margin-top:12px;">
+          Enviar Registro
+        </button>
+      </div>
+
+      <div class="table-section">
+        <div class="query-bar">
+          <label>Select all football matches</label>
+          <button id="btnLoadAllMatches"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </div>
+        <div class="query-bar">
+          <label>Search football match by ID</label>
+          <input type="text" id="searchMatchId" placeholder="Insert ID here">
+          <button id="btnSearchMatch"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </div>
+
+        <table id="matchTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Competition</th>
+              <th>Date</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody id="footballMatchTableBody">
+          </tbody>
+        </table>
+
+        <hr style="border-color: rgba(0,255,136,0.1); margin: 25px 0;" />
+        <h4 style="color:#a8b3c0; margin-bottom:15px;">Consultar Subcolección de Clubes</h4>
+        <div class="query-bar">
+          <label style="min-width: 250px;">ID del Partido (para buscar sus clubes)</label>
+          <input type="text" id="matchIdForClubs" placeholder="Inserte ID del partido">
+        </div>
+        <div class="query-bar">
+          <label>Buscar todos los clubes del partido</label>
+          <button id="btnLoadAllClubs"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </div>
+        <div class="query-bar">
+          <label>Buscar club por ID</label>
+          <input type="text" id="clubIdSearch" placeholder="Inserte ID del club">
+          <button id="btnSearchClubById"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </div>
+        <table id="clubsSubcollectionTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Club Name</th>
+              <th>City</th>
+              <th>Country</th>
+            </tr>
+          </thead>
+          <tbody id="clubsSubcollectionTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="player" class="tab-content">
+    <div class="container">
+      <div class="form-section">
+        <h3>Insert Player</h3>
+
+        <label>Player ID</label>
+        <input type="text" id="playerId" placeholder="Insert data here">
+
+        <label>Age</label>
+        <input type="number" id="age" placeholder="Insert data here">
+
+        <label>Club ID</label>
+        <input type="text" id="clubId" placeholder="Insert data here">
+
+        <label>First Name</label>
+        <input type="text" id="firstName" placeholder="Insert data here">
+
+        <label>Last Name</label>
+        <input type="text" id="lastName" placeholder="Insert data here">
+
+        <label>Nationality</label>
+        <input type="text" id="nationality" placeholder="Insert data here">
+
+        <button id="btnAddStat" class="action-btn" style="margin-top:10px;">
+          <i class="fa-solid fa-plus"></i> Agregar Stat
+        </button>
+
+        <div id="statContainer" style="margin-top:15px;"></div>
+
+        <button id="btnAddPlayer" class="action-btn" style="margin-top:12px;">Enviar Registro</button>
+      </div>
+
+      <div class="table-section">
+        <div class="query-bar">
+          <label>Select all players</label>
+          <button id="btnLoadAllPlayers"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </div>
+        <div class="query-bar">
+          <label>Search player by ID</label>
+          <input type="text" id="searchPlayerId" placeholder="Insert ID here">
+          <button id="btnSearchPlayer"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </div>
+        <div class="query-bar" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255, 165, 0, 0.3);">
+          <label style="color: #ffA500;">Migración de Datos (ETL)</label>
+          <button id="btnMigrateToSql" class="etl-button">
+            <i class="fa-solid fa-truck-fast"></i> Iniciar Migración a SQL
+          </button>
+        </div>
+
+        <table id="playerTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Age</th>
+              <th>Club ID</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Nationality</th>
+            </tr>
+          </thead>
+          <tbody id="playerTableBody"></tbody>
+        </table>
+
+        <hr style="border-color: rgba(0,255,136,0.1); margin: 25px 0;" />
+        <h4 style="color:#a8b3c0; margin-bottom:15px;">Consultar Subcolección de Estadísticas</h4>
+        <div class="query-bar">
+          <label style="min-width: 250px;">ID del Jugador (para buscar sus stats)</label>
+          <input type="text" id="playerIdForStats" placeholder="Inserte ID del jugador">
+        </div>
+        <div class="query-bar">
+          <label>Buscar todas las stats del jugador</label>
+          <button id="btnLoadAllStats"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </div>
+        <div class="query-bar">
+          <label>Buscar stat por ID</label>
+          <input type="text" id="statIdSearch" placeholder="Inserte ID de la stat">
+          <button id="btnSearchStatById"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </div>
+        <table id="statsSubcollectionTable">
+          <thead id="statsSubcollectionThead"></thead>
+          <tbody id="statsSubcollectionTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="profile" class="tab-content">
+    <div class="profile-container">
+      <h3>Mi Perfil</h3>
+      <p>Sube o actualiza tu foto de perfil.</p>
+
+      <div id="profileMessage" class="profile-message"></div>
+
+      <img id="profileImagePreview" src="https://placehold.co/150x150/263547/00ff88?text=Perfil"
+        alt="Vista previa de la imagen de perfil" class="profile-image-preview">
+
+      <form id="profileUploadForm" class="profile-form">
+        <div class="form-group">
+          <label>Nombre de Usuario (User)</label>
+          <div id="profileUsernameDisplay" class="profile-username-display">Cargando...</div>
+        </div>
+
+        <div class="form-group">
+          <label for="profileImageInput" class="file-label">
+            <i class="fa-solid fa-upload"></i> Seleccionar Imagen
+          </label>
+          <input type="file" id="profileImageInput" accept="image/png, image/jpeg, image/gif" required>
+        </div>
+
+        <button type="submit" id="profileUploadBtn">Subir Imagen</button>
+      </form>
+    </div>
+  </section>
+
+  <script src="/js/firebasePlayer.js"></script>
+  <script src="/js/firebaseClub.js"></script>
+  <script src="/js/firebaseFootballMatch.js"></script>
+  <script src="/js/firebaseStats.js"></script>
+  <script src="js/profile.js"></script>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    const clubTemplate = (index) => `
+    <div class="club-block" data-club-index="${index}">
+      <hr />
+      <h4 style="color:#fff; margin:6px 0 10px 0;">Insert Club</h4>
+      <label>Club ID</label><input type="text" name="clubId" placeholder="Insert data here">
+      <label>City</label><input type="text" name="city" placeholder="Insert data here">
+      <label>Club Name</label><input type="text" name="clubName" placeholder="Insert data here">
+      <label>Country</label><input type="text" name="country" placeholder="Insert data here">
+      <button type="button" class="remove-block">Eliminar</button>
+    </div>
+  `;
+
+    const statTemplate = (index) => `
+    <div class="stat-block" data-stat-index="${index}">
+      <hr />
+      <h4 style="color:#fff; margin:6px 0 10px 0;">Insert Stat</h4>
+      <label>Stat ID</label><input type="text" name="statId" placeholder="Insert data here">
+      <label>Assist</label><input type="number" name="assist" placeholder="Insert data here">
+      <label>Goals</label><input type="number" name="goals" placeholder="Insert data here">
+      <label>Match ID</label><input type="text" name="matchId" placeholder="Insert data here">
+      <label>Minutes Played</label><input type="number" name="minutesPlayed" placeholder="Insert data here">
+      <label>Rating</label><input type="number" name="rating" placeholder="Insert data here">
+      <label>Red Cards</label><input type="number" name="redCards" placeholder="Insert data here">
+      <label>Yellow Cards</label><input type="number" name="yellowCards" placeholder="Insert data here">
+      <button type="button" class="remove-block">Eliminar</button>
+    </div>
+  `;
+
+    let clubIndex = 0;
+    let statIndex = 0;
+
+    document.getElementById('btnAddClub').addEventListener('click', () => {
+      document.getElementById('clubContainer').insertAdjacentHTML('beforeend', clubTemplate(clubIndex++));
+      attachRemoveHandlers();
+    });
+
+    document.getElementById('btnAddStat').addEventListener('click', () => {
+      document.getElementById('statContainer').insertAdjacentHTML('beforeend', statTemplate(statIndex++));
+      attachRemoveHandlers();
+    });
+
+    function attachRemoveHandlers() {
+      const removes = document.querySelectorAll('.remove-block');
+      removes.forEach(btn => {
+        if (!btn.dataset.handled) {
+          btn.addEventListener('click', (e) => {
+            e.target.closest('.club-block, .stat-block').remove();
+          });
+          btn.dataset.handled = "1";
+        }
+      });
+    }
+
+    function formatDate(date) {
+      if (!date) return 'N/A';
+      if (typeof date === 'object' && date._seconds) {
+        return new Date(date._seconds * 1000).toISOString().split('T')[0];
+      }
+      return date;
+    }
+
+  </script>
+
+  <script>
+    document.getElementById('btnLoadAllMatches').addEventListener('click', async () => {
+      const matches = await getAllFootballMatches();
+      const tbody = document.getElementById('footballMatchTableBody');
+      tbody.innerHTML = matches.map(m => `
+    <tr>
+      <td>${m.id}</td>
+      <td>${m.competition}</td>
+      <td>${formatDate(m.date)}</td> <td>${m.result}</td>
+    </tr>
+  `).join('');
+    });
+
+    document.getElementById('btnSearchMatch').addEventListener('click', getFootballMatchById);
+    document.getElementById('btnAddMatch').addEventListener('click', createFootballMatch);
+
+    document.getElementById('btnLoadAllPlayers').addEventListener('click', async () => {
+      const players = await getAllPlayers();
+      const tbody = document.getElementById('playerTableBody');
+      tbody.innerHTML = players.map(p => `
+      <tr>
+        <td>${p.id}</td>
+        <td>${p.age || 'N/A'}</td>
+        <td>${p.clubId}</td>
+        <td>${p.firstName}</td>
+        <td>${p.lastName}</td>
+        <td>${p.nationality}</td>
+      </tr>
+    `).join('');
+    });
+
+    document.getElementById('btnSearchPlayer').addEventListener('click', getPlayerById);
+    document.getElementById('btnAddPlayer').addEventListener('click', createPlayer);
+    document.getElementById('btnMigrateToSql').addEventListener('click', migratePlayersToSql);
+  </script>
+
+  <script>
+    // --- Subcolección Clubs ---
+    document.getElementById('btnLoadAllClubs').addEventListener('click', async () => {
+      const matchId = document.getElementById('matchIdForClubs').value.trim();
+      if (!matchId) {
+        alert('Debes ingresar el ID del partido.');
+        return;
+      }
+
+      const res = await fetch(`/nosql/footballMatch/${matchId}/clubs`);
+      const tbody = document.getElementById('clubsSubcollectionTbody');
+
+      if (!res.ok) {
+        const err = await res.text();
+        tbody.innerHTML = `<tr><td colspan="4">${err}</td></tr>`;
+        return;
+      }
+
+      const clubs = await res.json();
+      tbody.innerHTML = clubs.map(c => `
+            <tr>
+                <td>${c.id}</td>
+                <td>${c.clubName || '-'}</td>
+                <td>${c.city || '-'}</td>
+                <td>${c.country || '-'}</td>
+            </tr>
+        `).join('');
+    });
+
+    document.getElementById('btnSearchClubById').addEventListener('click', async () => {
+      const matchId = document.getElementById('matchIdForClubs').value.trim();
+      const clubId = document.getElementById('clubIdSearch').value.trim();
+      if (!matchId || !clubId) {
+        alert('Debes ingresar el ID del partido y el ID del club.');
+        return;
+      }
+
+      const res = await fetch(`/nosql/footballMatch/${matchId}/club/${clubId}`);
+      const tbody = document.getElementById('clubsSubcollectionTbody');
+
+      if (!res.ok) {
+        const err = await res.text();
+        tbody.innerHTML = `<tr><td colspan="4">${err}</td></tr>`;
+        return;
+      }
+
+      const club = await res.json();
+      tbody.innerHTML = `
+            <tr>
+                <td>${club.id}</td>
+                <td>${club.clubName || '-'}</td>
+                <td>${club.city || '-'}</td>
+                <td>${club.country || '-'}</td>
+            </tr>
+        `;
+    });
+
+    // Subcolección stats ---
+    function renderStatsTable(stats) {
+      const thead = document.getElementById('statsSubcollectionThead');
+      const tbody = document.getElementById('statsSubcollectionTbody');
+      tbody.innerHTML = '';
+      thead.innerHTML = '';
+
+      if (!stats || (Array.isArray(stats) && stats.length === 0)) {
+        tbody.innerHTML = `<tr><td colspan="1">No se encontraron datos.</td></tr>`;
+        return;
+      }
+
+      const items = Array.isArray(stats) ? stats : [stats];
+      const headers = Object.keys(items[0]);
+
+      thead.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+      tbody.innerHTML = items.map(item => `
+            <tr>
+                ${headers.map(header => `<td>${item[header] === undefined ? '-' : item[header]}</td>`).join('')}
+            </tr>
+        `).join('');
+    }
+
+    document.getElementById('btnLoadAllStats').addEventListener('click', async () => {
+      const playerId = document.getElementById('playerIdForStats').value.trim();
+      if (!playerId) {
+        alert('Debes ingresar el ID del jugador.');
+        return;
+      }
+
+      const res = await fetch(`/nosql/player/${playerId}/stats`);
+      if (!res.ok) {
+        const err = await res.text();
+        renderStatsTable(null);
+        document.getElementById('statsSubcollectionTbody').innerHTML = `<tr><td colspan="1">${err}</td></tr>`;
+        return;
+      }
+      const stats = await res.json();
+      renderStatsTable(stats);
+    });
+
+    document.getElementById('btnSearchStatById').addEventListener('click', async () => {
+      const playerId = document.getElementById('playerIdForStats').value.trim();
+      const statId = document.getElementById('statIdSearch').value.trim();
+      if (!playerId || !statId) {
+        alert('Debes ingresar el ID del jugador y el ID de la estadística.');
+        return;
+      }
+
+      const res = await fetch(`/nosql/player/${playerId}/stat/${statId}`);
+      if (!res.ok) {
+        const err = await res.text();
+        renderStatsTable(null);
+        document.getElementById('statsSubcollectionTbody').innerHTML = `<tr><td colspan="1">${err}</td></tr>`;
+        return;
+      }
+      const stat = await res.json();
+      renderStatsTable(stat);
+    });
+  </script>
+
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', function (event) {
+      event.preventDefault(); 
+
+      console.log('Cerrando sesión...');
+      
+      window.location.href = 'login.html';
+    });
+  </script>
+
+</body>
+
+</html>
