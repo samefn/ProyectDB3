@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `soccerdb`.`player` (
     FOREIGN KEY (`club_id`)
     REFERENCES `soccerdb`.`club` (`club_id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 56;
+AUTO_INCREMENT = 21;
 
 
 -- -----------------------------------------------------
