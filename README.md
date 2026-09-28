@@ -187,3 +187,23 @@ Todo el grupo participo de forma activa durante todo el semestre en todas las et
     Santiago Moreno Echeverria - Frontend, Backend (cifrado, ETL, SQL y Firebase routes)
     Julian Camilo Muñoz Melo- Backend (Paginación, ETL, SQL routes)
     Martin Velandia Linares- Frontend, Backend (Gestion de imagenes, ETL, Firebase routes)
+
+## Modo demostración (versión en línea)
+
+Para poder mostrar la aplicación en internet **sin publicar las credenciales** de MySQL ni de Firebase, el proyecto incluye un modo demostración.
+
+**Cómo se activa:** automáticamente cuando no existe `env/serviceAccountKey.json`, o al definir la variable de entorno `DEMO_MODE=true`. Con `DEMO_MODE=false` se fuerza la conexión real.
+
+**Qué hace:**
+- Reemplaza MySQL y Firestore por bases de datos **en memoria** (`services/demo/`) que entienden las mismas consultas y respetan llaves primarias, `AUTO_INCREMENT`, `UNIQUE` y llaves foráneas.
+- Carga los datos de `DataSoccerDB.sql` en la base SQL y jugadores y partidos de ejemplo en la base NoSQL, para probar también la migración (ETL) de Firebase a MySQL.
+- Crea el usuario **demo / demo1234** y muestra un aviso en las páginas.
+- Reinicia los datos cada 30 minutos (`DEMO_RESET_MINUTES`).
+
+Las rutas, el frontend y la lógica ETL son los mismos que en la versión real. En local, con tus credenciales en `env/`, todo sigue conectándose a tus bases reales.
+
+**Probarlo en local sin credenciales (PowerShell):**
+
+    $env:DEMO_MODE="true"; npm start
+
+**Publicarlo en Render:** New → Blueprint → seleccionar este repositorio (usa `render.yaml`), o New → Web Service con `npm install` / `node server.js` y la variable `DEMO_MODE=true`.

@@ -29,7 +29,11 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 3 * 1024 * 1024 }, // máximo 3 MB por imagen
+  fileFilter: (req, file, cb) => cb(null, /^image\//.test(file.mimetype)),
+});
 
 /// Register
 router.post('/postUser', async (req, res) => {

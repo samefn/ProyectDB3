@@ -1,0 +1,13 @@
+# Despliegue en Render (modo demostración, sin credenciales)
+services:
+  - type: web
+    name: soccerdb-demo
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: DEMO_MODE
+        value: "true"
+      - key: DEMO_RESET_MINUTES
+        value: "30"

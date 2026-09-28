@@ -45,4 +45,6 @@ class SqlConnection{
     
 }
 
-module.exports=SqlConnection;
+// Modo demo: se usa la base MySQL en memoria (misma interfaz)
+const isDemo = require('./demoMode');
+module.exports = isDemo ? require('./demo/memorySql').MemorySqlConnection : SqlConnection;
